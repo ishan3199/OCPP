@@ -2,6 +2,7 @@
 
 import json
 import socket
+import time
 
 # create a socket object
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -15,15 +16,49 @@ port = 8009
 s.connect((host, port))
 
 # Receive no more than 1024 bytes
-msg = {"command":"BootNotificationPayload","Payload":{'charge_point_model': 'Optimus', 'charge_point_vendor': 'The Mobility', 'charge_box_serial_number': None, 'charge_point_serial_number': None, 'firmware_version': None, 'iccid': None, 'imsi': None, 'meter_serial_number': None, 'meter_type': None}
+
+
+msg2 = {"command":"AuthorizationPayload","Payload":{'idTag':'hello123'}
 }
-a=json.dumps(msg)
-s.sendall(bytes(a,encoding="utf-8"))
+a1=json.dumps(msg2)
+s.sendall(bytes(a1,encoding="utf-8"))
+
+message2=s.recv(1024)
+if message2 == b'{"AuthorizationConf": {"IdTagInfo": {"expiryDate": "NA", "parentIdTag": "NA", "status": "Accepted"}}}':
 
 
 
-message = s.recv(1024)
-print(message.decode())
+
+    msg23  = {"command":"BootNotificationPayload","Payload":{'charge_point_model': 'Optimus', 'charge_point_vendor': 'The Mobility', 'charge_box_serial_number': None, 'charge_point_serial_number': None, 'firmware_version': None, 'iccid': None, 'imsi': None, 'meter_serial_number': None, 'meter_type': None}
+
+            }
+    a3 = json.dumps(msg23)
+    s.sendall(bytes(a3, encoding="utf-8"))
+    print("Accepted and Boot Notification sent!!")
+    time.sleep(4)
+    print(s.recv(1024).decode())
+
+
+else:
+    msg23 = {"command": "zero", "Payload": {'idTag': 'hello123'}
+             }
+    a3 = json.dumps(msg23)
+    s.sendall(bytes(a3, encoding="utf-8"))
+    print("Pending")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
