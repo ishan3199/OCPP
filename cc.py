@@ -47,11 +47,17 @@ while True:
 
     if ready_server.getsockname()[1] == 8007:
         if p == '1':
-            amds='accepted'
-            connection.send(amds.encode('ascii'))
+            msg100={"command": "BootNotificationResponse",
+                "Payload": {'currentTime': datetime.utcnow().isoformat() ,'heartBeatInterval': 10,'Status': 'Accepted'}}
+            a59 = json.dumps(msg100)
+            connection.sendall(bytes(a59, encoding="utf-8"))
+
         else:
-            amdsa = 'Rejected'
-            connection.send(amdsa.encode('ascii'))
+            msg101 = {"command": "BootNotificationResponse",
+                      "Payload": {'currentTime': datetime.utcnow().isoformat(), 'heartBeatInterval': 10,
+                                  'Status': 'Rejected'}}
+            a591 = json.dumps(msg101)
+            connection.sendall(bytes(a591, encoding="utf-8"))
 
 
 
@@ -121,11 +127,11 @@ while True:
             ad2 = json.loads(boot2.decode('utf-8'))
             if hey == 1:
                 hi=ad2
-                if hi['command']=='BootResponse' and hi['data']['status']=='Accepted':
+                if hi['command']=='BootNotificationResponse' and hi['data']['status']=='Accepted':
                     p='1'
 
 
-                print(hi)
+
 
             print(ad2)
             hey=hey+1
@@ -197,7 +203,6 @@ while True:
         elif a['command'] == 'AuthorizationPayload':
 
             if j == 0:
-                print(json.loads(message2.decode('utf-8')))  # Gets the incomming message
 
                 msg3 = a
                 f4 = json.dumps(msg3)
@@ -227,8 +232,7 @@ while True:
                 message2 = connection.recv(1024)
                 acd=json.loads(message2.decode('utf-8'))
                 k.append(acd)
-                m=p
-                connection.send(m.encode('ascii'))
+
 
 
 

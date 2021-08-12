@@ -29,22 +29,23 @@ if message2 == b'{"AuthorizationConf": {"IdTagInfo": {"expiryDate": "NA", "paren
 
 
 
-    msg23  = {"command":"BootNotificationPayload","Payload":{'charge_point_model': 'Optimus', 'charge_point_vendor': 'The Mobility', 'charge_box_serial_number': None, 'charge_point_serial_number': None, 'firmware_version': None, 'iccid': None, 'imsi': None, 'meter_serial_number': None, 'meter_type': None}
+
+    msg23  = {"command":"BootNotificationPayload","Payload":{'charge_point_model': 'Optmus', 'charge_point_vendor': 'The Mobility', 'charge_box_serial_number': None, 'charge_point_serial_number': None, 'firmware_version': None, 'iccid': None, 'imsi': None, 'meter_serial_number': None, 'meter_type': None}
 
             }
     a3 = json.dumps(msg23)
     s.sendall(bytes(a3, encoding="utf-8"))
-    print("Accepted and Boot Notification sent!!")
-    time.sleep(4)
-    print(s.recv(1024).decode())
+    print("ID tag Accepted... "
+          "Boot Notification sent!!..")
+
 
 
 else:
-    msg23 = {"command": "zero", "Payload": {'idTag': 'hello123'}
-             }
+    msg23 = {"command": "Not Authorized"}
+
     a3 = json.dumps(msg23)
     s.sendall(bytes(a3, encoding="utf-8"))
-    print("Pending")
+    print("Not Authorized")
 
 
 
@@ -68,4 +69,3 @@ else:
 s.close()
 
 
-        
